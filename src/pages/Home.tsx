@@ -16,7 +16,7 @@ const User: React.FC = () => (
       <span className="font-medium">残高: </span>
       <span className="font-bold">5,392 ふぅこ</span>
     </div>
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-4 gap-2">
       <div className="flex flex-col items-center p-2 bg-gray-100 rounded-md">
         <i className="i-ic-baseline-home text-5xl mb-2"></i>
         <span>ホーム</span>

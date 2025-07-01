@@ -27,7 +27,7 @@ const MenuPopup: React.FC<MenuPopupProps> = ({ isOpen, onClose }) => {
             <span>ホーム</span>
           </Link>
           <Link
-            to="/about"
+            to="/history"
             onClick={onClose}
             className="flex flex-col items-center p-3 bg-gray-100 rounded-md"
           >
