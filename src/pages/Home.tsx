@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Card from "../components/Card";
 
 const User: React.FC = () => (
@@ -17,26 +18,41 @@ const User: React.FC = () => (
       <span className="font-bold">5,392 ふぅこ</span>
     </div>
     <div className="grid grid-cols-4 gap-2">
-      <div className="flex flex-col items-center p-2 bg-gray-100 rounded-md">
+      <Link
+        to="/"
+        className="flex flex-col items-center p-2 bg-gray-100 rounded-md"
+      >
         <i className="i-ic-baseline-home text-5xl mb-2"></i>
         <span>ホーム</span>
-      </div>
-      <div className="flex flex-col items-center p-2 bg-gray-100 rounded-md">
+      </Link>
+      <Link
+        to="/history"
+        className="flex flex-col items-center p-2 bg-gray-100 rounded-md"
+      >
         <i className="i-ic-baseline-history text-5xl mb-2"></i>
         <span>履歴</span>
-      </div>
-      <div className="flex flex-col items-center p-2 bg-gray-100 rounded-md">
+      </Link>
+      <Link
+        to="/issuance"
+        className="flex flex-col items-center p-2 bg-gray-100 rounded-md"
+      >
         <i className="i-ic-baseline-attach-money text-5xl mb-2"></i>
         <span>為替発行</span>
-      </div>
-      <div className="flex flex-col items-center p-2 bg-gray-100 rounded-md">
+      </Link>
+      <Link
+        to="/issuance-list"
+        className="flex flex-col items-center p-2 bg-gray-100 rounded-md"
+      >
         <i className="i-ic-baseline-list text-5xl mb-2"></i>
         <span>為替一覧</span>
-      </div>
-      <div className="flex flex-col items-center p-2 bg-gray-100 rounded-md col-span-2">
+      </Link>
+      <Link
+        to="/my-qr-code"
+        className="flex flex-col items-center p-2 bg-gray-100 rounded-md col-span-2"
+      >
         <i className="i-ic-baseline-qr-code text-5xl mb-2"></i>
         <span>MyQR</span>
-      </div>
+      </Link>
     </div>
   </Card>
 );

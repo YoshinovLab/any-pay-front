@@ -35,7 +35,7 @@ const MenuPopup: React.FC<MenuPopupProps> = ({ isOpen, onClose }) => {
             <span>履歴</span>
           </Link>
           <Link
-            to="/contact"
+            to="/issuance"
             onClick={onClose}
             className="flex flex-col items-center p-3 bg-gray-100 rounded-md"
           >
@@ -43,7 +43,7 @@ const MenuPopup: React.FC<MenuPopupProps> = ({ isOpen, onClose }) => {
             <span>為替発行</span>
           </Link>
           <Link
-            to="/user"
+            to="/issuance-list"
             onClick={onClose}
             className="flex flex-col items-center p-3 bg-gray-100 rounded-md"
           >
@@ -51,7 +51,7 @@ const MenuPopup: React.FC<MenuPopupProps> = ({ isOpen, onClose }) => {
             <span>為替一覧</span>
           </Link>
           <Link
-            to="/user"
+            to="/my-qr-code"
             onClick={onClose}
             className="flex flex-col items-center p-3 bg-gray-100 rounded-md col-span-2"
           >
