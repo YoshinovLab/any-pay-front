@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MenuPopup from "./components/MenuPopup.tsx";
-import __Home from "./pages/__Home.tsx";
 import History from "./pages/History.tsx";
 import Home from "./pages/Home.tsx";
 import Issuance from "./pages/Issuance.tsx";
@@ -21,7 +20,6 @@ function App() {
         </nav>
         <div className="flex h-full justify-center items-center">
           <Routes>
-            <Route path="/__home" element={<__Home />} />
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/history" element={<History />} />
