@@ -1,16 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Card from "../components/Card";
+import type { UserData } from "../services/userService";
+import { getUser } from "../services/userService";
 
 const User: React.FC = () => {
+  const [userData, setUserData] = useState<UserData | null>(null);
   useEffect(() => {
-    fetch("/api/user/1")
-      .then((res) => res.json())
-      .then((data) => {
-        alert(JSON.stringify(data));
-      })
+    getUser(1)
+      .then(setUserData)
       .catch((err) => console.error(err));
   }, []);
+
+  if (!userData) {
+    return <div className="text-center mt-8">Loading...</div>;
+  }
 
   return (
     <Card className="max-w-lg mx-auto my-8">
@@ -19,13 +23,23 @@ const User: React.FC = () => {
           <i className="i-ic-baseline-person text-5xl"></i>
         </div>
         <div>
-          <div className="text-lg font-semibold">MizunoShota/水野翔太</div>
-          <div className="text-sm text-gray-600">ID: 213278592169</div>
+          <div className="text-lg font-semibold">
+            {userData.editable_profile.name}
+          </div>
+          <div className="text-sm text-gray-600">ID: {userData.id}</div>
+          <div className="text-sm text-gray-600">
+            Email: {userData.editable_profile.email}
+          </div>
+          <div className="text-sm text-gray-600">
+            Phone: {userData.editable_profile.phone}
+          </div>
         </div>
       </div>
       <div className="bg-green-100 p-2 rounded-md mb-6">
         <span className="font-medium">残高: </span>
-        <span className="font-bold">5,392 ふぅこ</span>
+        <span className="font-bold">
+          {userData.balance.toLocaleString()} ふぅこ
+        </span>
       </div>
       <div className="grid grid-cols-4 gap-2">
         <Link
