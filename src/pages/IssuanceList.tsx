@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Card from "../components/Card";
-
-interface IssuanceRecord {
-  id: string;
-  amount: number;
-  memo: string;
-  date: string;
-}
+import type { CheckResponse } from "../services/api";
+import { getChecksByUser } from "../services/api";
 
 const IssuanceList: React.FC = () => {
-  const [records, setRecords] = useState<IssuanceRecord[]>([]);
+  const [records, setRecords] = useState<CheckResponse[]>([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem("issuanceRecords");
-    if (stored) {
-      setRecords(JSON.parse(stored) as IssuanceRecord[]);
-    }
+    getChecksByUser(1)
+      .then(setRecords)
+      .catch((err) => console.error(err));
   }, []);
 
   return (
@@ -34,7 +28,7 @@ const IssuanceList: React.FC = () => {
           <tbody>
             {records.map((rec) => (
               <tr key={rec.id} className="border-t">
-                <td className="px-2 py-1">{rec.date.slice(5)}</td>
+                <td className="px-2 py-1">{rec.issued_at.slice(0, 10)}</td>
                 <td className="px-2 py-1">{rec.memo}</td>
                 <td className="px-2 py-1 text-right">{rec.amount} ふぅこ</td>
                 <td className="px-2 py-1">{rec.id}</td>

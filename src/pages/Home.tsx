@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Card from "../components/Card";
-import type { UserData } from "../services/userService";
-import { getUser } from "../services/userService";
+import type { UserData } from "../services/api";
+import { getUser } from "../services/api";
 
 const User: React.FC = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
