@@ -1,6 +1,6 @@
 import React from "react";
 import Card from "../components/Card";
-import { claimCheck, getClaimNonce } from "../services/api";
+import { claimCheck, getClaimNonce, getUser } from "../services/api";
 
 const IssuanceResult: React.FC = () => {
   // URLのクエリパラメータから値を取得
@@ -12,8 +12,11 @@ const IssuanceResult: React.FC = () => {
   const handleDiscard = async () => {
     if (!window.confirm("本当にこの為替を破棄しますか？")) return;
     try {
+      // 自分のユーザーIDを取得する方法（例: グローバル状態やpropsから）
+      // ここでは例としてwindow.userIdを利用（実際は適切な取得方法に置換してください）
+      const me = await getUser(1);
       const nonce = await getClaimNonce(id);
-      await claimCheck(id, nonce);
+      await claimCheck(id, nonce, me.id);
       alert("為替を破棄しました。");
       window.location.href = "/";
     } catch (e) {
@@ -45,7 +48,9 @@ const IssuanceResult: React.FC = () => {
           閉じる
         </button>
         <button
-          onClick={() => { void handleDiscard(); }}
+          onClick={() => {
+            void handleDiscard();
+          }}
           className="w-full bg-gray-400 text-white p-2 rounded-md mt-2"
         >
           為替を破棄する

@@ -100,7 +100,10 @@ interface CheckClaimResponse {
 // チェックclaim用nonce取得
 export async function getClaimNonce(checkId: string): Promise<string> {
   const res = await fetch(`/api/check/${checkId}/claim/init`);
-  if (!res.ok) throw new Error("nonce取得失敗");
+  if (!res.ok) {
+    console.error("Response:", await res.json());
+    throw new Error("nonce取得失敗");
+  }
   const data: { nonce: string } = (await res.json()) as CheckClaimResponse;
   return data.nonce;
 }
@@ -109,9 +112,12 @@ export async function getClaimNonce(checkId: string): Promise<string> {
 export async function claimCheck(
   checkId: string,
   nonce: string,
+  recipientId: number,
 ): Promise<void> {
   const res = await fetch(
-    `/api/check/${checkId}/claim?nonce=${encodeURIComponent(nonce)}`,
+    `/api/check/${checkId}/claim?nonce=${encodeURIComponent(
+      nonce,
+    )}&recipient_id=${recipientId}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -119,5 +125,8 @@ export async function claimCheck(
       credentials: "include",
     },
   );
-  if (!res.ok) throw new Error("破棄処理失敗");
+  if (!res.ok) {
+    console.error("Response:", await res.json());
+    throw new Error("破棄処理失敗");
+  }
 }
