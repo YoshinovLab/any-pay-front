@@ -1,4 +1,5 @@
-import { useState } from "react";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MenuPopup from "./components/MenuPopup.tsx";
 import FixedRemittance from "./pages/FixedRemittance.tsx";
@@ -7,11 +8,19 @@ import Home from "./pages/Home.tsx";
 import Issuance from "./pages/Issuance.tsx";
 import IssuanceList from "./pages/IssuanceList.tsx";
 import IssuanceResult from "./pages/IssuanceResult.tsx";
+import Login from "./pages/Login.tsx";
 import MyQRCode from "./pages/MyQRCode.tsx";
 import Remittance from "./pages/Remittance.tsx";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // userId Cookieがなければ/loginへリダイレクト
+  useEffect(() => {
+    const userId = Cookies.get("userId");
+    if (!userId && window.location.pathname !== "/login") {
+      window.location.href = "/login";
+    }
+  }, []);
   return (
     <BrowserRouter>
       <div className="relative h-screen">
@@ -30,6 +39,7 @@ function App() {
             <Route path="/issuance-list" element={<IssuanceList />} />
             <Route path="/issuance-result" element={<IssuanceResult />} />
             <Route path="/remittance" element={<Remittance />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/fixed-remittance" element={<FixedRemittance />} />
           </Routes>
         </div>
