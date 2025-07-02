@@ -14,14 +14,8 @@ const History: React.FC = () => {
 
   // 初期ロードでユーザーのトランザクション履歴取得
   useEffect(() => {
-    const startDate = `${yearMonth.year}-${String(yearMonth.month).padStart(
-      2,
-      "0",
-    )}-01`;
-    const endDate = `${yearMonth.year}-${String(yearMonth.month).padStart(
-      2,
-      "0",
-    )}-${new Date(yearMonth.year, yearMonth.month, 0).getDate()}`;
+    const startDate = `${yearMonth.year}-${String(yearMonth.month).padStart(2, "0")}-01`;
+    const endDate = new Date(yearMonth.year, yearMonth.month, 0).toISOString().slice(0, 10);
     getTransactionsByUser(1, startDate, endDate)
       .then(setTransactions)
       .catch((err) => console.error(err));

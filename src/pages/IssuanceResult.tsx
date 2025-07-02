@@ -1,11 +1,26 @@
 import React from "react";
 import Card from "../components/Card";
+import { claimCheck, getClaimNonce } from "../services/api";
 
 const IssuanceResult: React.FC = () => {
   // URLのクエリパラメータから値を取得
   const params = new URLSearchParams(window.location.search);
   const amount = Number(params.get("amount") ?? "0");
   const id = params.get("id") ?? "";
+
+  // 破棄処理
+  const handleDiscard = async () => {
+    if (!window.confirm("本当にこの為替を破棄しますか？")) return;
+    try {
+      const nonce = await getClaimNonce(id);
+      await claimCheck(id, nonce);
+      alert("為替を破棄しました。");
+      window.location.href = "/";
+    } catch (e) {
+      alert("破棄に失敗しました。");
+      console.error(e);
+    }
+  };
 
   return (
     <Card className="max-w-md mx-auto my-8">
@@ -28,6 +43,12 @@ const IssuanceResult: React.FC = () => {
           className="w-full bg-red-500 text-white p-2 rounded-md"
         >
           閉じる
+        </button>
+        <button
+          onClick={() => { void handleDiscard(); }}
+          className="w-full bg-gray-400 text-white p-2 rounded-md mt-2"
+        >
+          為替を破棄する
         </button>
       </div>
     </Card>

@@ -48,6 +48,29 @@ export async function getChecksByUser(
   return (await res.json()) as CheckResponse[];
 }
 
+// チェックを発行
+export async function createCheck(
+  issuer_user_id: number,
+  amount: number,
+  memo: string,
+  description: string,
+): Promise<CheckResponse> {
+  const res = await fetch("/api/check/?issuer_user_id=" + issuer_user_id, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ amount, memo, description }),
+  });
+  console.log(res.body);
+  if (!res.ok) {
+    console.error("Response:", await res.json());
+    throw new Error(`Failed to issue check: ${res.status}`);
+  }
+
+  return (await res.json()) as CheckResponse;
+}
+
 // トランザクションレスポンス型定義
 export interface TransactionResponse {
   id: string;
@@ -70,4 +93,31 @@ export async function getTransactionsByUser(
     throw new Error(`Failed to fetch transactions: ${res.status}`);
   }
   return (await res.json()) as TransactionResponse[];
+}
+interface CheckClaimResponse {
+  nonce: string;
+}
+// チェックclaim用nonce取得
+export async function getClaimNonce(checkId: string): Promise<string> {
+  const res = await fetch(`/api/check/${checkId}/claim/init`);
+  if (!res.ok) throw new Error("nonce取得失敗");
+  const data: { nonce: string } = (await res.json()) as CheckClaimResponse;
+  return data.nonce;
+}
+
+// チェックをclaim（破棄）
+export async function claimCheck(
+  checkId: string,
+  nonce: string,
+): Promise<void> {
+  const res = await fetch(
+    `/api/check/${checkId}/claim?nonce=${encodeURIComponent(nonce)}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({}),
+      credentials: "include",
+    },
+  );
+  if (!res.ok) throw new Error("破棄処理失敗");
 }
