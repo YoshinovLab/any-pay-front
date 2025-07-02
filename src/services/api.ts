@@ -17,9 +17,12 @@ export interface UserData {
   attrs: Record<string, { value: string; label: string }>;
 }
 
+// APIベースURL
+const API_BASE: string = import.meta.env.VITE_API_BASE_URL as string;
+
 // ユーザーを取得
 export async function getUser(userId: number): Promise<UserData> {
-  const res = await fetch(`/api/user/${userId}`);
+  const res = await fetch(`${API_BASE}user/${userId}`);
   if (!res.ok) {
     throw new Error(`Failed to fetch user: ${res.status}`);
   }
@@ -41,7 +44,7 @@ export interface CheckResponse {
 export async function getChecksByUser(
   userId: number,
 ): Promise<CheckResponse[]> {
-  const res = await fetch(`/api/check/user/${userId}`);
+  const res = await fetch(`${API_BASE}check/user/${userId}`);
   if (!res.ok) {
     throw new Error(`Failed to fetch checks: ${res.status}`);
   }
@@ -55,13 +58,16 @@ export async function createCheck(
   memo: string,
   description: string,
 ): Promise<CheckResponse> {
-  const res = await fetch("/api/check/?issuer_user_id=" + issuer_user_id, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const res = await fetch(
+    `${API_BASE}check/?issuer_user_id=${issuer_user_id}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ amount, memo, description }),
     },
-    body: JSON.stringify({ amount, memo, description }),
-  });
+  );
   console.log(res.body);
   if (!res.ok) {
     console.error("Response:", await res.json());
@@ -87,7 +93,7 @@ export async function getTransactionsByUser(
   endDate: string,
 ): Promise<TransactionResponse[]> {
   const res = await fetch(
-    `/api/transaction/user/${userId}?start_date=${startDate}&end_date=${endDate}`,
+    `${API_BASE}transaction/user/${userId}?start_date=${startDate}&end_date=${endDate}`,
   );
   if (!res.ok) {
     throw new Error(`Failed to fetch transactions: ${res.status}`);
@@ -99,7 +105,7 @@ interface CheckClaimResponse {
 }
 // チェックclaim用nonce取得
 export async function getClaimNonce(checkId: string): Promise<string> {
-  const res = await fetch(`/api/check/${checkId}/claim/init`);
+  const res = await fetch(`${API_BASE}check/${checkId}/claim/init`);
   if (!res.ok) {
     console.error("Response:", await res.json());
     throw new Error("nonce取得失敗");
@@ -117,7 +123,7 @@ export async function claimCheck(
   recipientId: number,
 ): Promise<void> {
   const res = await fetch(
-    `/api/check/${checkId}/claim?nonce=${encodeURIComponent(
+    `${API_BASE}check/${checkId}/claim?nonce=${encodeURIComponent(
       nonce,
     )}&recipient_id=${recipientId}`,
     {
