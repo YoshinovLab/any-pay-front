@@ -8,19 +8,19 @@ const IssuanceResult: React.FC = () => {
   const amount = Number(params.get("amount") ?? "0");
   const id = params.get("id") ?? "";
 
-  // 破棄処理
-  const handleDiscard = async () => {
-    if (!window.confirm("本当にこの為替を破棄しますか？")) return;
+  // 使用処理
+  const handleUse = async () => {
+    if (!window.confirm("本当にこの為替を使用しますか？")) return;
     try {
       // 自分のユーザーIDを取得する方法（例: グローバル状態やpropsから）
       // ここでは例としてwindow.userIdを利用（実際は適切な取得方法に置換してください）
       const me = await getUser(1);
       const nonce = await getClaimNonce(id);
       await claimCheck(id, nonce, me.id);
-      alert("為替を破棄しました。");
+      alert("為替を使用しました。");
       window.history.back();
     } catch (e) {
-      alert("破棄に失敗しました。");
+      alert("使用に失敗しました。");
       console.error(e);
     }
   };
@@ -34,26 +34,33 @@ const IssuanceResult: React.FC = () => {
           <div className="text-right text-sm text-gray-500 mt-2">ID: {id}</div>
         </div>
         <button
-          onClick={() =>
-            window.open(`https://line.me/R/msg/text/?${amount} ふぅこ`)
-          }
+          onClick={() => {
+            void handleUse();
+          }}
+          className="w-full bg-green-500 text-white p-2 rounded-md"
+        >
+          為替を使う
+        </button>
+        <button
+          onClick={() => {
+            void (async () => {
+              try {
+                await navigator.clipboard.writeText(window.location.href);
+                alert("リンクをコピーしました");
+              } catch {
+                alert("コピーに失敗しました");
+              }
+            })();
+          }}
           className="w-full bg-blue-500 text-white p-2 rounded-md"
         >
-          LINEのお友達に送る
+          リンクをコピー
         </button>
         <button
           onClick={() => (window.location.href = "/")}
           className="w-full bg-red-500 text-white p-2 rounded-md"
         >
           閉じる
-        </button>
-        <button
-          onClick={() => {
-            void handleDiscard();
-          }}
-          className="w-full bg-gray-400 text-white p-2 rounded-md mt-2"
-        >
-          為替を破棄する
         </button>
       </div>
     </Card>
