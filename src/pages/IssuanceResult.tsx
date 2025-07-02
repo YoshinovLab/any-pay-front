@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import React from "react";
 import Card from "../components/Card";
 import { claimCheck, getClaimNonce, getUser } from "../services/api";
@@ -14,7 +15,8 @@ const IssuanceResult: React.FC = () => {
     try {
       // 自分のユーザーIDを取得する方法（例: グローバル状態やpropsから）
       // ここでは例としてwindow.userIdを利用（実際は適切な取得方法に置換してください）
-      const me = await getUser(1);
+      const userId = Number(Cookies.get("userId"));
+      const me = await getUser(userId);
       const nonce = await getClaimNonce(id);
       await claimCheck(id, nonce, me.id);
       alert("為替を使用しました。");

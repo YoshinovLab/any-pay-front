@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import Card from "../components/Card";
 import {
@@ -12,7 +13,7 @@ const FixedRemittance: React.FC = () => {
   const [memo, setMemo] = useState("");
   const [recipient, setRecipient] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
-  const userId = 1;
+  const userId = Number(Cookies.get("userId"));
 
   useEffect(() => {
     // URLパラメータから送金先と金額を取得
@@ -24,7 +25,7 @@ const FixedRemittance: React.FC = () => {
     getUser(userId)
       .then((user) => setBalance(user.balance))
       .catch((err) => console.error(err));
-  }, []);
+  }, [userId]);
 
   const handleSend = async () => {
     if (!recipient) {

@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Card from "../components/Card";
@@ -7,7 +8,8 @@ import { getUser } from "../services/api";
 const User: React.FC = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   useEffect(() => {
-    getUser(1)
+    const userId = Number(Cookies.get("userId"));
+    getUser(userId)
       .then(setUserData)
       .catch((err) => console.error(err));
   }, []);

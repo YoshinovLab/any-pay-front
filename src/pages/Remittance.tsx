@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import Card from "../components/Card";
 import {
@@ -13,7 +14,7 @@ const Remittance: React.FC = () => {
   const [expr, setExpr] = useState("");
   const [result, setResult] = useState<number>(0);
   const [recipient, setRecipient] = useState<string>("");
-  const userId = 1;
+  const userId = Number(Cookies.get("userId"));
 
   useEffect(() => {
     // URLパラメータから送金先を取得
@@ -23,7 +24,7 @@ const Remittance: React.FC = () => {
     getUser(userId)
       .then((user) => setBalance(user.balance))
       .catch((err) => console.error(err));
-  }, []);
+  }, [userId]);
 
   const handleButton = (val: string) => () => {
     setExpr((prev) => prev + val);

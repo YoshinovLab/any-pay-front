@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import Card from "../components/Card";
 import { createCheck, getUser } from "../services/api";
@@ -7,13 +8,13 @@ const Issuance: React.FC = () => {
   const [memo, setMemo] = useState("");
   const [expr, setExpr] = useState("");
   const [result, setResult] = useState<number>(0);
-  const userId = 1;
+  const userId = Number(Cookies.get("userId"));
 
   useEffect(() => {
     getUser(userId)
       .then((user) => setBalance(user.balance))
       .catch((err) => console.error(err));
-  }, []);
+  }, [userId]);
 
   const handleButton = (val: string) => () => {
     setExpr((prev) => prev + val);
