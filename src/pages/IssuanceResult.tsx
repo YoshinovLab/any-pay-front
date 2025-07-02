@@ -13,8 +13,6 @@ const IssuanceResult: React.FC = () => {
   const handleUse = async () => {
     if (!window.confirm("本当にこの為替を使用しますか？")) return;
     try {
-      // 自分のユーザーIDを取得する方法（例: グローバル状態やpropsから）
-      // ここでは例としてwindow.userIdを利用（実際は適切な取得方法に置換してください）
       const userId = Number(Cookies.get("userId"));
       const me = await getUser(userId);
       const nonce = await getClaimNonce(id);
