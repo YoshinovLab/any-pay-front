@@ -27,4 +27,3 @@ dev-dist
 CI/dist
 
 .env
-openapi*.json

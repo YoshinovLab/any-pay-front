@@ -47,3 +47,27 @@ export async function getChecksByUser(
   }
   return (await res.json()) as CheckResponse[];
 }
+
+// トランザクションレスポンス型定義
+export interface TransactionResponse {
+  id: string;
+  amount: number;
+  memo: string | null;
+  created_at: string;
+  // other fields omitted
+}
+
+// 指定ユーザーのトランザクション履歴取得
+export async function getTransactionsByUser(
+  userId: number,
+  startDate: string,
+  endDate: string,
+): Promise<TransactionResponse[]> {
+  const res = await fetch(
+    `/api/transaction/user/${userId}?start_date=${startDate}&end_date=${endDate}`,
+  );
+  if (!res.ok) {
+    throw new Error(`Failed to fetch transactions: ${res.status}`);
+  }
+  return (await res.json()) as TransactionResponse[];
+}

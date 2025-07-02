@@ -1,26 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../components/Card";
-
-interface Transaction {
-  id: number;
-  date: string;
-  amount: string;
-  description: string;
-}
+import type { TransactionResponse } from "../services/api";
+import { getTransactionsByUser } from "../services/api";
 
 const History: React.FC = () => {
-  const transactions: Transaction[] = [
-    { id: 1, date: "2025-07-01", amount: "-1,000 ふぅこ", description: "購入" },
-    { id: 2, date: "2025-06-30", amount: "+2,500 ふぅこ", description: "売却" },
-    { id: 3, date: "2025-06-29", amount: "-300 ふぅこ", description: "手数料" },
-  ];
-
+  const [transactions, setTransactions] = useState<TransactionResponse[]>([]);
   // 月表示用 state
   const today = new Date();
   const [yearMonth, setYearMonth] = useState({
     year: today.getFullYear(),
     month: today.getMonth() + 1,
   });
+
+  // 初期ロードでユーザーのトランザクション履歴取得
+  useEffect(() => {
+    const startDate = `${yearMonth.year}-${String(yearMonth.month).padStart(
+      2,
+      "0",
+    )}-01`;
+    const endDate = `${yearMonth.year}-${String(yearMonth.month).padStart(
+      2,
+      "0",
+    )}-${new Date(yearMonth.year, yearMonth.month, 0).getDate()}`;
+    getTransactionsByUser(1, startDate, endDate)
+      .then(setTransactions)
+      .catch((err) => console.error(err));
+  }, [yearMonth.month, yearMonth.year]);
   // 月移動
   const prevMonth = () => {
     setYearMonth(({ year, month }) => ({
@@ -36,7 +41,7 @@ const History: React.FC = () => {
   };
   // 該当月の取引フィルタ
   const ym = `${yearMonth.year}-${String(yearMonth.month).padStart(2, "0")}`;
-  const monthly = transactions.filter((tx) => tx.date.startsWith(ym));
+  const monthly = transactions.filter((tx) => tx.created_at.startsWith(ym));
   return (
     <Card className="max-w-lg mx-auto my-8">
       <div className="flex justify-between items-center mb-4">
@@ -62,16 +67,18 @@ const History: React.FC = () => {
           <thead>
             <tr className="bg-gray-200">
               <th className="px-2 py-1 text-left">日付</th>
-              <th className="px-2 py-1 text-left">内容</th>
+              <th className="px-2 py-1 text-left">メモ</th>
               <th className="px-2 py-1 text-right">金額</th>
             </tr>
           </thead>
           <tbody>
             {monthly.map((tx) => (
               <tr key={tx.id} className="border-t">
-                <td className="px-2 py-1">{tx.date.slice(8)}</td>
-                <td className="px-2 py-1">{tx.description}</td>
-                <td className="px-2 py-1 text-right">{tx.amount}</td>
+                <td className="px-2 py-1">{tx.created_at.slice(8)}</td>
+                <td className="px-2 py-1">{tx.memo ?? "-"}</td>
+                <td className="px-2 py-1 text-right">
+                  {tx.amount.toLocaleString()} ふぅこ
+                </td>
               </tr>
             ))}
           </tbody>
