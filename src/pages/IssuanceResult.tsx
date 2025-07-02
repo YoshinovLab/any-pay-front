@@ -4,6 +4,27 @@ import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 import { claimCheck, getClaimNonce, getUser } from "../services/api";
 
+// 汎用クリップボードコピー関数
+async function copyToClipboard(text: string): Promise<boolean> {
+  try {
+    if (window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } else {
+      const input = document.createElement("input");
+      input.value = text;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      document.body.removeChild(input);
+      return true;
+    }
+  } catch (e) {
+    console.error("Clipboard copy failed:", e);
+    return false;
+  }
+}
+
 const IssuanceResult: React.FC = () => {
   const navigate = useNavigate();
   // URLのクエリパラメータから値を取得
@@ -46,12 +67,18 @@ const IssuanceResult: React.FC = () => {
         <button
           onClick={() => {
             void (async () => {
-              try {
-                await navigator.clipboard.writeText(window.location.href);
-                alert("リンクをコピーしました");
-              } catch {
-                alert("コピーに失敗しました");
+              const { origin, pathname, search, hash } = window.location;
+              const base = import.meta.env.BASE_URL || "/";
+              let path = pathname;
+              if (base !== "/" && path.startsWith(base)) {
+                path = path.slice(base.length - 1);
               }
+              const currentPath = path + search + hash;
+              const url = `${origin}${base}?redirect=${encodeURIComponent(
+                currentPath,
+              )}`;
+              const ok = await copyToClipboard(url);
+              alert(ok ? "リンクをコピーしました" : "コピーに失敗しました");
             })();
           }}
           className="w-full bg-blue-500 text-white p-2 rounded-md"

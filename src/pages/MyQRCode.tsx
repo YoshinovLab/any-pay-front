@@ -5,7 +5,11 @@ import QRCode from "react-qr-code";
 const QRCodePage: React.FC = () => {
   const userId = Cookies.get("userId");
   const origin = window.location.origin;
-  const remittanceUrl = `${origin}/remittance?to=${userId}`;
+  const base = import.meta.env.BASE_URL || "/";
+  const redirectPath = `/remittance?to=${userId}`;
+  const remittanceUrl = `${origin}${base}?redirect=${encodeURIComponent(
+    redirectPath,
+  )}`;
 
   return (
     <div className="max-w-sm mx-auto my-8 text-center">

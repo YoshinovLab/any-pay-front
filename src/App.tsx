@@ -20,10 +20,24 @@ function App() {
   useEffect(() => {
     const userId = Cookies.get("userId");
     const base = import.meta.env.BASE_URL;
-    if (!userId && window.location.pathname !== `${base}login`) {
-      navigate("/login", { replace: true });
+    const params = new URLSearchParams(window.location.search);
+    const redirect = params.get("redirect");
+    const isLoginPage = window.location.pathname === `${base}login`;
+    if (!userId) {
+      if (!isLoginPage) {
+        // loginページ以外ならloginへリダイレクト
+        navigate(
+          redirect
+            ? `/login?redirect=${encodeURIComponent(redirect)}`
+            : "/login",
+          { replace: true },
+        );
+      }
+    } else if (redirect && !isLoginPage) {
+      navigate(redirect, { replace: true });
     }
   }, [navigate]);
+
   return (
     <div className="relative h-screen">
       <nav className="absolute top-0 right-0 p-4 flex items-center z-10">
