@@ -16,7 +16,13 @@ const Login: React.FC = () => {
     // テスト用: userIdをCookieに保存（有効期限5分）
     Cookies.set("userId", userId, { expires: 1 / 288, path: "/" });
     alert(`userId ${userId} でログインしました`);
-    navigate("/");
+    const params = new URLSearchParams(window.location.search);
+    const redirect = params.get("redirect");
+    if (redirect) {
+      navigate(redirect, { replace: true });
+    } else {
+      navigate("/");
+    }
   };
 
   return (

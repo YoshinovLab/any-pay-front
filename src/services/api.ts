@@ -18,7 +18,10 @@ export interface UserData {
 }
 
 // APIベースURL
-const API_BASE: string = import.meta.env.VITE_API_BASE_URL as string;
+const API_BASE: string =
+  import.meta.env.MODE === "development"
+    ? "/api/"
+    : (import.meta.env.VITE_API_BASE_URL as string);
 
 // ユーザーを取得
 export async function getUser(userId: number): Promise<UserData> {
