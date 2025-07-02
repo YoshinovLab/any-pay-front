@@ -29,12 +29,6 @@ const User: React.FC = () => {
             {userData.editable_profile.name}
           </div>
           <div className="text-sm text-gray-600">ID: {userData.id}</div>
-          <div className="text-sm text-gray-600">
-            Email: {userData.editable_profile.email}
-          </div>
-          <div className="text-sm text-gray-600">
-            Phone: {userData.editable_profile.phone}
-          </div>
         </div>
       </div>
       <div className="bg-green-100 p-2 rounded-md mb-6">
