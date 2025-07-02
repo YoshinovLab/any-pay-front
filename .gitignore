@@ -26,4 +26,4 @@ dev-dist
 
 CI/dist
 
-.env
+.env*

@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 import { createCheck, getUser } from "../services/api";
 
@@ -9,6 +10,7 @@ const Issuance: React.FC = () => {
   const [expr, setExpr] = useState("");
   const [result, setResult] = useState<number>(0);
   const userId = Number(Cookies.get("userId"));
+  const navigate = useNavigate();
 
   useEffect(() => {
     getUser(userId)
@@ -41,7 +43,7 @@ const Issuance: React.FC = () => {
     const amount = expr !== "" ? Number(eval(expr)) : result;
     createCheck(userId, amount, memo, "")
       .then((check) => {
-        window.location.href = `/issuance-result?amount=${amount}&id=${check.id}`;
+        navigate(`/issuance-result?amount=${amount}&id=${check.id}`);
       })
       .catch((error) => {
         console.error(error);

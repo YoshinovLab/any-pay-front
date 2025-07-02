@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import MenuPopup from "./components/MenuPopup.tsx";
 import FixedRemittance from "./pages/FixedRemittance.tsx";
 import History from "./pages/History.tsx";
@@ -12,41 +12,54 @@ import Login from "./pages/Login.tsx";
 import MyQRCode from "./pages/MyQRCode.tsx";
 import Remittance from "./pages/Remittance.tsx";
 
+export default App;
+
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // userId Cookieがなければ/loginへリダイレクト
+  const navigate = useNavigate();
   useEffect(() => {
     const userId = Cookies.get("userId");
-    if (!userId && window.location.pathname !== "/login") {
-      window.location.href = "/login";
+    const base = import.meta.env.BASE_URL;
+    const params = new URLSearchParams(window.location.search);
+    const redirect = params.get("redirect");
+    const isLoginPage = window.location.pathname === `${base}login`;
+    if (!userId) {
+      if (!isLoginPage) {
+        // loginページ以外ならloginへリダイレクト
+        navigate(
+          redirect
+            ? `/login?redirect=${encodeURIComponent(redirect)}`
+            : "/login",
+          { replace: true },
+        );
+      }
+    } else if (redirect && !isLoginPage) {
+      navigate(redirect, { replace: true });
     }
-  }, []);
+  }, [navigate]);
+
   return (
-    <BrowserRouter>
-      <div className="relative h-screen">
-        <nav className="absolute top-0 right-0 p-4 flex items-center z-10">
-          <button onClick={() => setIsMenuOpen(true)} className="text-xl">
-            <i className="i-ic-baseline-menu text-5xl"></i>
-          </button>
-        </nav>
-        <div className="flex h-full justify-center items-center">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/issuance" element={<Issuance />} />
-            <Route path="/my-qr-code" element={<MyQRCode />} />
-            <Route path="/issuance-list" element={<IssuanceList />} />
-            <Route path="/issuance-result" element={<IssuanceResult />} />
-            <Route path="/remittance" element={<Remittance />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/fixed-remittance" element={<FixedRemittance />} />
-          </Routes>
-        </div>
-        <MenuPopup isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+    <div className="relative h-screen">
+      <nav className="absolute top-0 right-0 p-4 flex items-center z-10">
+        <button onClick={() => setIsMenuOpen(true)} className="text-xl">
+          <i className="i-ic-baseline-menu text-5xl"></i>
+        </button>
+      </nav>
+      <div className="flex h-full justify-center items-center">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/issuance" element={<Issuance />} />
+          <Route path="/my-qr-code" element={<MyQRCode />} />
+          <Route path="/issuance-list" element={<IssuanceList />} />
+          <Route path="/issuance-result" element={<IssuanceResult />} />
+          <Route path="/remittance" element={<Remittance />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/fixed-remittance" element={<FixedRemittance />} />
+        </Routes>
       </div>
-    </BrowserRouter>
+      <MenuPopup isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+    </div>
   );
 }
-
-export default App;

@@ -1,9 +1,11 @@
 import Cookies from "js-cookie";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 
 const Login: React.FC = () => {
   const [userId, setUserId] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -14,7 +16,13 @@ const Login: React.FC = () => {
     // テスト用: userIdをCookieに保存（有効期限5分）
     Cookies.set("userId", userId, { expires: 1 / 288, path: "/" });
     alert(`userId ${userId} でログインしました`);
-    window.location.href = "/";
+    const params = new URLSearchParams(window.location.search);
+    const redirect = params.get("redirect");
+    if (redirect) {
+      navigate(redirect, { replace: true });
+    } else {
+      navigate("/");
+    }
   };
 
   return (
