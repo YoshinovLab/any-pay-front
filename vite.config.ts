@@ -7,7 +7,9 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
   const apiBaseUrl = env.VITE_API_BASE_URL;
+  const basePath = env.VITE_BASE_PATH || "/";
   return {
+    base: basePath,
     server: {
       proxy: {
         "/api": {
