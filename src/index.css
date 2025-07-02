@@ -1,6 +1,2 @@
 @import "tailwindcss";
 @plugin '@egoist/tailwindcss-icons';
-
-body {
-  background-color: #EEEEEE;
-}
