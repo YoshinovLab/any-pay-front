@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../components/Card";
+import { createCheck, getUser } from "../services/api";
 
 const Issuance: React.FC = () => {
-  const [balance] = useState("5,392");
+  const [balance, setBalance] = useState<number>(0);
   const [memo, setMemo] = useState("");
   const [expr, setExpr] = useState("");
   const [result, setResult] = useState<number>(0);
+  const userId = 1;
+
+  useEffect(() => {
+    getUser(userId)
+      .then((user) => setBalance(user.balance))
+      .catch((err) => console.error(err));
+  }, []);
 
   const handleButton = (val: string) => () => {
     setExpr((prev) => prev + val);
@@ -25,24 +33,19 @@ const Issuance: React.FC = () => {
   };
 
   const handleIssue = () => {
-    // 発行前に確認ダイアログを表示
     if (!window.confirm("発行しますよ！いいですか？✈️")) {
       return;
     }
-    const newId =
-      Date.now().toString() + Math.floor(Math.random() * 1000).toString();
-    // 発行履歴をlocalStorageに保存
-    const record = {
-      id: newId,
-      amount: result,
-      memo: memo,
-      date: new Date().toISOString().slice(0, 10),
-    };
-    const prev = localStorage.getItem("issuanceRecords");
-    const list = prev ? (JSON.parse(prev) as any[]) : [];
-    list.push(record);
-    localStorage.setItem("issuanceRecords", JSON.stringify(list));
-    window.location.href = `/issuance/result?amount=${result}&id=${newId}`;
+    // 計算結果が未計算の場合は計算する
+    const amount = expr !== "" ? Number(eval(expr)) : result;
+    createCheck(userId, amount, memo, "")
+      .then((check) => {
+        window.location.href = `/issuance/result?amount=${amount}&id=${check.id}`;
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("発行に失敗しました。");
+      });
   };
 
   return (
@@ -52,7 +55,7 @@ const Issuance: React.FC = () => {
         <div className="text-xl font-semibold mb-2 text-center">為替発行</div>
         <div className="bg-green-100 p-2 rounded-md mb-4 flex justify-between">
           <span className="font-medium">残高:</span>
-          <span className="font-bold">{balance} ふぅこ</span>
+          <span className="font-bold">{balance.toLocaleString()} ふぅこ</span>
         </div>
         <input
           type="text"
