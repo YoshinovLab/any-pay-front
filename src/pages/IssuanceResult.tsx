@@ -1,9 +1,11 @@
 import Cookies from "js-cookie";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 import { claimCheck, getClaimNonce, getUser } from "../services/api";
 
 const IssuanceResult: React.FC = () => {
+  const navigate = useNavigate();
   // URLのクエリパラメータから値を取得
   const params = new URLSearchParams(window.location.search);
   const amount = Number(params.get("amount") ?? "0");
@@ -57,7 +59,9 @@ const IssuanceResult: React.FC = () => {
           リンクをコピー
         </button>
         <button
-          onClick={() => (window.location.href = "/")}
+          onClick={() => {
+            navigate("/");
+          }}
           className="w-full bg-red-500 text-white p-2 rounded-md"
         >
           閉じる

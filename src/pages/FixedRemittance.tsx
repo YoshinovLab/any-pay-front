@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 import {
   claimCheck,
@@ -13,7 +14,9 @@ const FixedRemittance: React.FC = () => {
   const [memo, setMemo] = useState("");
   const [recipient, setRecipient] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
+
   const userId = Number(Cookies.get("userId"));
+  const navigate = useNavigate();
 
   useEffect(() => {
     // URLパラメータから送金先と金額を取得
@@ -43,7 +46,7 @@ const FixedRemittance: React.FC = () => {
       const check = await createCheck(userId, amount, memo, "");
       const nonce = await getClaimNonce(check.id);
       await claimCheck(check.id, nonce, Number(recipient));
-      location.href = "/history";
+      navigate("/history");
     } catch (e) {
       alert("送金に失敗しました");
       console.error(e);
