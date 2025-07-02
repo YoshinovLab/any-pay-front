@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 import type { CheckResponse } from "../services/api";
 import { getChecksByUser } from "../services/api";
@@ -6,6 +7,7 @@ import { getChecksByUser } from "../services/api";
 const IssuanceList: React.FC = () => {
   const [records, setRecords] = useState<CheckResponse[]>([]);
 
+  const navigate = useNavigate();
   useEffect(() => {
     getChecksByUser(1)
       .then(setRecords)
@@ -43,9 +45,11 @@ const IssuanceList: React.FC = () => {
                   <button
                     className="bg-blue-500 text-white px-2 py-1 rounded text-xs"
                     onClick={() => {
-                      window.location.href = `/issuance-result?id=${encodeURIComponent(
-                        rec.id,
-                      )}&amount=${encodeURIComponent(rec.amount)}`;
+                      navigate(
+                        `/issuance-result?id=${encodeURIComponent(
+                          rec.id,
+                        )}&amount=${encodeURIComponent(rec.amount)}`,
+                      );
                     }}
                   >
                     詳細
