@@ -40,7 +40,7 @@ const Issuance: React.FC = () => {
     const amount = expr !== "" ? Number(eval(expr)) : result;
     createCheck(userId, amount, memo, "")
       .then((check) => {
-        window.location.href = `/issuance/result?amount=${amount}&id=${check.id}`;
+        window.location.href = `/issuance-result?amount=${amount}&id=${check.id}`;
       })
       .catch((error) => {
         console.error(error);

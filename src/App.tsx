@@ -26,7 +26,7 @@ function App() {
             <Route path="/issuance" element={<Issuance />} />
             <Route path="/my-qr-code" element={<MyQRCode />} />
             <Route path="/issuance-list" element={<IssuanceList />} />
-            <Route path="/issuance/result" element={<IssuanceResult />} />
+            <Route path="/issuance-result" element={<IssuanceResult />} />
           </Routes>
         </div>
         <MenuPopup isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />

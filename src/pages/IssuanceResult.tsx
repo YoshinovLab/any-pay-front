@@ -18,7 +18,7 @@ const IssuanceResult: React.FC = () => {
       const nonce = await getClaimNonce(id);
       await claimCheck(id, nonce, me.id);
       alert("為替を破棄しました。");
-      window.location.href = "/";
+      window.history.back();
     } catch (e) {
       alert("破棄に失敗しました。");
       console.error(e);
@@ -42,7 +42,7 @@ const IssuanceResult: React.FC = () => {
           LINEのお友達に送る
         </button>
         <button
-          onClick={() => window.history.back()}
+          onClick={() => (window.location.href = "/")}
           className="w-full bg-red-500 text-white p-2 rounded-md"
         >
           閉じる

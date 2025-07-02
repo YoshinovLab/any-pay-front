@@ -28,6 +28,8 @@ export async function getUser(userId: number): Promise<UserData> {
 
 // チェックレスポンス型定義
 export interface CheckResponse {
+  description: string;
+  issuer_user_id: string;
   id: string;
   amount: number;
   memo: string | null;
@@ -105,6 +107,8 @@ export async function getClaimNonce(checkId: string): Promise<string> {
     throw new Error("nonce取得失敗");
   }
   const data: { nonce: string } = (await res.json()) as CheckClaimResponse;
+  // nonceをCookieに明示的にセット
+  document.cookie = `check_claim_nonce=${data.nonce}; path=/`;
   return data.nonce;
 }
 
