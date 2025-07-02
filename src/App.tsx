@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MenuPopup from "./components/MenuPopup.tsx";
+import FixedRemittance from "./pages/FixedRemittance.tsx";
 import History from "./pages/History.tsx";
 import Home from "./pages/Home.tsx";
 import Issuance from "./pages/Issuance.tsx";
 import IssuanceList from "./pages/IssuanceList.tsx";
 import IssuanceResult from "./pages/IssuanceResult.tsx";
 import MyQRCode from "./pages/MyQRCode.tsx";
+import Remittance from "./pages/Remittance.tsx";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,6 +29,8 @@ function App() {
             <Route path="/my-qr-code" element={<MyQRCode />} />
             <Route path="/issuance-list" element={<IssuanceList />} />
             <Route path="/issuance-result" element={<IssuanceResult />} />
+            <Route path="/remittance" element={<Remittance />} />
+            <Route path="/fixed-remittance" element={<FixedRemittance />} />
           </Routes>
         </div>
         <MenuPopup isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />

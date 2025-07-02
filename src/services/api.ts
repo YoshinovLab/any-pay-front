@@ -33,9 +33,7 @@ export interface CheckResponse {
   id: string;
   amount: number;
   memo: string | null;
-  // 発行日時
   issued_at: string;
-  // 有効期限
   expires_at: string;
 }
 
